@@ -33,6 +33,6 @@ class MovementController extends Controller
     {
         $service->register($request->validated());
 
-        return to_route('movements.store')->with('status', 'Movimiento registrado');
+        return to_route('movements.index')->with('status', 'Movimiento registrado');
     }
 }
