@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:latest
+    container_name: deposito_kang_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: deposito_kang
+      MYSQL_USER: kang_user
+      MYSQL_PASSWORD: tu_password_segura
+      MYSQL_ROOT_PASSWORD: tu_password_segura
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:
