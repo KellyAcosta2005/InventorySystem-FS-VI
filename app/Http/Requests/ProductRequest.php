@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductRequest extends FormRequest
 {
@@ -12,7 +13,7 @@ class ProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +24,14 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:120'],
+            'description' => ['nullable', 'string', 'max:300'],
+            'sku' => [
+                'required', 'string', 'max:60',
+                Rule::unique('products', 'sku')
+                    ->ignore($this->route('product')),
+            ],
+            'category' => ['required', 'string', 'max:80'],
         ];
     }
 }
