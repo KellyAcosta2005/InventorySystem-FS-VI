@@ -2,18 +2,30 @@
 
 use App\Http\Controllers\MovementController;
 use App\Http\Controllers\ProductController;
+use App\Models\Movement;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
-// Ruta para la vista del Dashboard (asigna el nombre 'dashboard' que usa la plantilla base)
 Route::get('/dashboard', function () {
-    return view('welcome');
+    return view('dashboard', [
+        'productCount'     => Product::count(),
+        'totalStock'       => Product::sum('stock'),
+        'lowStockCount'    => Product::where('stock', '<=', 5)->count(),
+        'stockByCategory'  => Product::query()
+            ->selectRaw('category, SUM(stock) as total_stock')
+            ->groupBy('category')
+            ->orderBy('category')
+            ->get(),
+        'recentMovements'  => Movement::with('product')
+            ->latest('moved_at')
+            ->limit(10)
+            ->get(),
+    ]);
 })->name('dashboard');
 
-// Redirección de la raíz del sitio hacia /dashboard
 Route::redirect('/', '/dashboard');
 
-// Recurso de Productos
 Route::resource('products', ProductController::class)->except('show');
 
-// Recurso de Movimientos (versión optimizada)
+// Puedes mantener la versión resumida con Route::resource:
 Route::resource('movements', MovementController::class)->only(['index', 'store']);
