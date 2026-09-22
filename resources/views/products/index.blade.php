@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Productos | Depósito KANG')
+@section('title', 'Productos | KANG Sistema de Inventarios')
 
 @section('content')
     <div class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">

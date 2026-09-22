@@ -10,12 +10,13 @@ use Illuminate\Validation\ValidationException;
 
 class MovementService
 {
-    public function register(array $data): Movement
+    public function register(array $data, int $companyId): Movement
     {
         $data['moved_at'] = Carbon::parse($data['moved_at'], config('app.timezone'));
 
-        return DB::transaction(function () use ($data) {
+        return DB::transaction(function () use ($data, $companyId) {
             $product = Product::query()
+                ->where('company_id', $companyId)
                 ->lockForUpdate()
                 ->findOrFail($data['product_id']);
 

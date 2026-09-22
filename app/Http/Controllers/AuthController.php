@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Company;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,24 +16,6 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request): RedirectResponse
-    {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required', 'string'],
-        ]);
-
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
-            return back()
-                ->withErrors(['email' => 'Las credenciales no son válidas.'])
-                ->onlyInput('email');
-        }
-
-        $request->session()->regenerate();
-
-        return to_route('dashboard');
-    }
-
     public function showRegister(): View
     {
         return view('auth.register');
@@ -45,15 +27,18 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', 'string', 'min:8'],
+            'company_name' => ['required', 'string', 'max:255'],
         ]);
 
-        $user = User::create([
+        $company = Company::create(['name' => $data['company_name']]);
+
+        $user = $company->users()->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
 
-        $user->assignRole('operario');
+        $user->assignRole('Administrador');
         Auth::login($user);
         $request->session()->regenerate();
 

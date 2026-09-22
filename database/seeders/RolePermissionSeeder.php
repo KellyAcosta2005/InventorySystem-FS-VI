@@ -18,11 +18,12 @@ class RolePermissionSeeder extends Seeder
 
         $manageProducts = Permission::findOrCreate('manage products', 'web');
         $registerMovements = Permission::findOrCreate('register movements', 'web');
+        $manageOperators = Permission::findOrCreate('manage operators', 'web');
 
-        Role::findOrCreate('administrador', 'web')
-            ->syncPermissions([$manageProducts, $registerMovements]);
+        Role::findOrCreate('Administrador', 'web')
+            ->syncPermissions([$manageProducts, $registerMovements, $manageOperators]);
 
-        Role::findOrCreate('operario', 'web')
+        Role::findOrCreate('Operario', 'web')
             ->syncPermissions([$registerMovements]);
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();

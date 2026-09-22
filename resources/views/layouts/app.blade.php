@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Depósito KANG')</title>
+    <title>@yield('title', 'KANG Sistema de Inventarios')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-slate-100 text-slate-900 antialiased">
@@ -14,7 +14,7 @@
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
                         <span class="flex size-10 items-center justify-center rounded-xl bg-blue-500 text-lg font-black text-white shadow-lg shadow-blue-950/40">K</span>
                         <span>
-                            <span class="block text-lg font-bold tracking-tight">Depósito KANG</span>
+                            <span class="block text-lg font-bold tracking-tight">KANG Sistema de Inventarios</span>
                             <span class="block text-xs font-medium text-slate-400">Control de inventario</span>
                         </span>
                     </a>
@@ -88,7 +88,7 @@
             <div class="w-full max-w-md">
                 <a href="{{ route('login') }}" class="mb-8 flex items-center justify-center gap-3">
                     <span class="flex size-11 items-center justify-center rounded-xl bg-blue-700 text-xl font-black text-white shadow-lg shadow-blue-200">K</span>
-                    <span class="text-xl font-black tracking-tight text-slate-950">Depósito KANG</span>
+                    <span class="text-xl font-black tracking-tight text-slate-950">KANG Sistema de Inventarios</span>
                 </a>
                 @yield('content')
             </div>

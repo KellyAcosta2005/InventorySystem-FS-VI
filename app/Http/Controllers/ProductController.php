@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -16,6 +16,7 @@ class ProductController extends Controller
     public function index(Request $request): View
     {
         $products = Product::query()
+            ->where('company_id', auth()->user()->company_id)
             ->when($request->filled('search'), function ($query) use ($request) {
                 $search = $request->string('search')->trim();
                 $query->where(function ($query) use ($search) {
@@ -36,7 +37,7 @@ class ProductController extends Controller
      */
     public function create(): View
     {
-        return view('products.create', ['product' => new Product()]);
+        return view('products.create', ['product' => new Product]);
     }
 
     /**
@@ -44,7 +45,7 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request): RedirectResponse
     {
-        Product::create($request->validated());
+        Product::create([...$request->validated(), 'company_id' => auth()->user()->company_id]);
 
         return to_route('products.index')->with('status', 'Producto creado.');
     }
@@ -62,27 +63,34 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
+        abort_unless($product->company_id === auth()->user()->company_id, 404);
+
         return view('products.edit', compact('product'));
     }
-/**
- * Update the specified resource in storage.
- */
-public function update(ProductRequest $request, Product $product): RedirectResponse
-{
-    $product->update($request->validated());
 
-    return to_route('products.index')->with('status', 'Producto actualizado.');
-}
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(ProductRequest $request, Product $product): RedirectResponse
+    {
+        abort_unless($product->company_id === auth()->user()->company_id, 404);
 
-/**
- * Remove the specified resource from storage.
- */
-public function destroy(Product $product): RedirectResponse
-{
-    abort_if($product->movements()->exists(), 422, 'Producto con historial.');
+        $product->update($request->validated());
 
-    $product->delete();
+        return to_route('products.index')->with('status', 'Producto actualizado.');
+    }
 
-    return to_route('products.index')->with('status', 'Producto eliminado.');
-}
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Product $product): RedirectResponse
+    {
+        abort_unless($product->company_id === auth()->user()->company_id, 404);
+
+        abort_if($product->movements()->exists(), 422, 'Producto con historial.');
+
+        $product->delete();
+
+        return to_route('products.index')->with('status', 'Producto eliminado.');
+    }
 }

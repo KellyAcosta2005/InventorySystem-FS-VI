@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Movimientos | Depósito KANG')
+@section('title', 'Movimientos | KANG Sistema de Inventarios')
 
 @section('content')
     <div class="mb-8">

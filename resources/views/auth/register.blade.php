@@ -7,7 +7,7 @@
         <div class="mb-8">
             <p class="mb-2 text-sm font-bold uppercase tracking-[0.18em] text-blue-600">Únete al equipo</p>
             <h1 class="text-3xl font-black tracking-tight text-slate-950">Crear cuenta</h1>
-            <p class="mt-2 text-sm leading-6 text-slate-500">Las cuentas nuevas se registran como operarios.</p>
+            <p class="mt-2 text-sm leading-6 text-slate-500">Crea tu empresa y conviértete en su primer administrador.</p>
         </div>
 
         @if ($errors->any())
@@ -21,8 +21,12 @@
         <form method="POST" action="{{ route('register') }}" class="space-y-5">
             @csrf
             <div>
+                <label for="company_name" class="mb-2 block text-sm font-bold text-slate-700">Nombre de la empresa</label>
+                <input id="company_name" type="text" name="company_name" value="{{ old('company_name') }}" required autofocus autocomplete="organization" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+            </div>
+            <div>
                 <label for="name" class="mb-2 block text-sm font-bold text-slate-700">Nombre completo</label>
-                <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
+                <input id="name" type="text" name="name" value="{{ old('name') }}" required autocomplete="name" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100">
             </div>
             <div>
                 <label for="email" class="mb-2 block text-sm font-bold text-slate-700">Correo electrónico</label>

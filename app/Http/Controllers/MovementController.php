@@ -14,7 +14,10 @@ class MovementController extends Controller
 {
     public function index(Request $request): View
     {
+        $companyId = auth()->user()->company_id;
+
         $movements = Movement::with('product')
+            ->whereHas('product', fn ($query) => $query->where('company_id', $companyId))
             ->when($request->filled('type'), fn ($query) => $query->where('type', $request->string('type'))
             )
             ->when($request->filled('product_id'), fn ($query) => $query->where('product_id', $request->integer('product_id'))
@@ -25,13 +28,13 @@ class MovementController extends Controller
 
         return view('movements.index', [
             'movements' => $movements,
-            'products' => Product::orderBy('name')->get(),
+            'products' => Product::where('company_id', $companyId)->orderBy('name')->get(),
         ]);
     }
 
     public function store(StoreMovementRequest $request, MovementService $service): RedirectResponse
     {
-        $service->register($request->validated());
+        $service->register($request->validated(), auth()->user()->company_id);
 
         return to_route('movements.index')->with('status', 'Movimiento registrado');
     }
