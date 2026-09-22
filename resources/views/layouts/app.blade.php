@@ -11,7 +11,7 @@
         <div class="min-h-screen lg:flex">
             <aside class="bg-slate-950 text-white lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col">
                 <div class="flex items-center justify-between border-b border-white/10 px-6 py-5 lg:block">
-                    <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
+                    <a href="{{ route(auth()->user()->can('manage products') ? 'dashboard' : 'movements.index') }}" class="flex items-center gap-3">
                         <span class="flex size-10 items-center justify-center rounded-xl bg-blue-500 text-lg font-black text-white shadow-lg shadow-blue-950/40">K</span>
                         <span>
                             <span class="block text-lg font-bold tracking-tight">KANG Sistema de Inventarios</span>
@@ -21,10 +21,12 @@
                 </div>
 
                 <nav class="flex gap-2 overflow-x-auto px-4 py-3 lg:flex-1 lg:block lg:space-y-2 lg:px-4 lg:py-8">
-                    <a href="{{ route('dashboard') }}" class="flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white shadow-lg shadow-blue-950/30' : '' }}">
-                        <svg aria-hidden="true" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h6v6h-6v-6Z" /></svg>
-                        Dashboard
-                    </a>
+                    @if (auth()->user()->can('manage products'))
+                        <a href="{{ route('dashboard') }}" class="flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white shadow-lg shadow-blue-950/30' : '' }}">
+                            <svg aria-hidden="true" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h6v6h-6v-6Z" /></svg>
+                            Dashboard
+                        </a>
+                    @endif
                     @if (auth()->user()->can('manage products'))
                         <a href="{{ route('products.index') }}" class="flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white {{ request()->routeIs('products.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-950/30' : '' }}">
                             <svg aria-hidden="true" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="m4 7 8-4 8 4-8 4-8-4Zm0 0v10l8 4 8-4V7M12 11v10" /></svg>
@@ -35,6 +37,12 @@
                         <a href="{{ route('movements.index') }}" class="flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white {{ request()->routeIs('movements.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-950/30' : '' }}">
                             <svg aria-hidden="true" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5v14m0 0-3-3m3 3 3-3M16 19V5m0 0 3 3m-3-3-3 3" /></svg>
                             Movimientos
+                        </a>
+                    @endif
+                    @if (auth()->user()->can('manage operators'))
+                        <a href="{{ route('operators.index') }}" class="flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white {{ request()->routeIs('operators.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-950/30' : '' }}">
+                            <svg aria-hidden="true" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-7.5 15a7.5 7.5 0 0 1 15 0" /></svg>
+                            Operarios
                         </a>
                     @endif
                 </nav>
