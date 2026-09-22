@@ -12,24 +12,30 @@ beforeEach(function () {
     $this->seed(RolePermissionSeeder::class);
 });
 
-test('public registration assigns the operator role', function () {
+test('a freshly registered administrator can access products and movements', function () {
     /** @var TestCase $this */
-    $response = $this->post('/register', [
-        'name' => 'Operador nuevo',
-        'email' => 'operador@example.com',
+    $this->post('/register', [
+        'name' => 'Admin nuevo',
+        'email' => 'admin-nuevo@example.com',
+        'company_name' => 'Nueva Empresa',
         'password' => 'password',
         'password_confirmation' => 'password',
-    ]);
+    ])->assertRedirect('/dashboard');
 
-    $response->assertRedirect('/dashboard');
-    expect(User::where('email', 'operador@example.com')->first()?->hasRole('operario'))
-        ->toBeTrue();
+    $user = User::where('email', 'admin-nuevo@example.com')->first();
+
+    $this->actingAs($user)
+        ->get('/products')
+        ->assertOk();
+
+    $this->actingAs($user)
+        ->get('/movements')
+        ->assertOk();
 });
 
 test('an operator can access movements but not products', function () {
     /** @var TestCase $this */
-    $user = User::factory()->create();
-    $user->assignRole('operario');
+    $user = autor('Operario');
 
     $this->actingAs($user)
         ->get('/movements')

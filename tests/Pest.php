@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Company;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -44,7 +47,24 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * Create a user with the given role, optionally bound to a company.
+ */
+function autor(string $role, ?Company $company = null): User
 {
-    // ..
+    $user = $company === null
+        ? User::factory()->create()
+        : User::factory()->for($company)->create();
+
+    $user->assignRole($role);
+
+    return $user;
+}
+
+/**
+ * Create a product associated with the given company.
+ */
+function productFor(Company $company, array $attributes = []): Product
+{
+    return Product::factory()->for($company)->create($attributes);
 }
