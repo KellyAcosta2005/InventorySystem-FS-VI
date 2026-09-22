@@ -34,7 +34,7 @@ class Login extends Component
 
     public static function redirectRouteName(): string
     {
-        return Auth::user()?->hasRole('Operario') ? 'movements.index' : 'dashboard';
+        return Auth::user()?->can('manage products') ? 'dashboard' : 'movements.index';
     }
 
     public function render(): View

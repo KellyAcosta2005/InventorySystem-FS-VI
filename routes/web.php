@@ -8,7 +8,11 @@ use App\Models\Movement;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/dashboard');
+Route::get('/', function () {
+    return auth()->check()
+        ? redirect()->route(auth()->user()->can('manage products') ? 'dashboard' : 'movements.index')
+        : redirect()->to('/dashboard');
+});
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
