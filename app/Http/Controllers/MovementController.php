@@ -34,7 +34,7 @@ class MovementController extends Controller
 
     public function store(StoreMovementRequest $request, MovementService $service): RedirectResponse
     {
-        $service->register($request->validated(), auth()->user()->company_id);
+        $service->register($request->user(), $request->validated());
 
         return to_route('movements.index')->with('status', 'Movimiento registrado');
     }

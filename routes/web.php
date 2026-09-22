@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
                 ->limit(10)
                 ->get(),
         ]);
-    })->name('dashboard');
+    })->name('dashboard')->middleware('can:manage products');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

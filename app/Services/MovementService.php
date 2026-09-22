@@ -4,19 +4,20 @@ namespace App\Services;
 
 use App\Models\Movement;
 use App\Models\Product;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class MovementService
 {
-    public function register(array $data, int $companyId): Movement
+    public function register(User $user, array $data): Movement
     {
         $data['moved_at'] = Carbon::parse($data['moved_at'], config('app.timezone'));
 
-        return DB::transaction(function () use ($data, $companyId) {
+        return DB::transaction(function () use ($user, $data) {
             $product = Product::query()
-                ->where('company_id', $companyId)
+                ->where('company_id', $user->company_id)
                 ->lockForUpdate()
                 ->findOrFail($data['product_id']);
 
